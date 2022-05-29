@@ -1,0 +1,34 @@
+// get subgraph of tags connected to tags 'z', 'prayforukraine','ukrainewarrussia'
+CALL apoc.export.graphml.query("
+match (a:tag)-[:has*1..2]-(b:tag)
+where a.title in ['z', 'prayforukraine','ukrainewarrussia']
+merge (a)<-[e:tag_connected]-(b)
+return a,e,b
+", "tags.graphml",
+ {useTypes: true, storeNodeIds:true, readLabels:true})
+
+
+// delete created relationship
+match (:tag)-[e:tag_connected]-(:tag)
+delete e
+
+
+// get the list of users who posted videos with tags 'z', 'prayforukraine','ukrainewarrussia'
+match (u:user)--(v:video)--(t:tag)
+where t.title in ['ukrainewarrussia', 'z', 'prayforukraine']
+return distinct u.id
+
+
+// get the subgraph of users using list extracted above
+CALL apoc.export.graphml.query("
+match (u1:user)-[e]-(u2:user)
+where u1.id in ['themiracle35', 'janebespala', 'grafdracc', 'whitecheddarbread', 'bloomzone', 'morya4ok_87', 'stand.with.ukraine.now', 'sinkritov1ykh', 'thehistorylegends', 'ucrainemood', 'funwithkmq', 'stand_ua', 'jxdnesslove', 'ukraine_war_1', 'mediaweb2022', 'kamilla13_45pm', 'myworldin2022', 'andrewsyrotiuk', 'doshyk_putina', 'mari.fil', 'ukraine_russian_war', 'vadym9629', 'emileghessen', 'aviationhxb', 'pyropluto', 'city__resident', 'stayscrappy', '4kut4gaw4', 'niki_ili2', 'mrssixhundred', 'history_of_indonesia', 'artbybrimoore', 'ohyhfaru', 'primeroses_', 'portaldlamlodych', 'theworldexplained1', 'zaraxworldd', 'heartsfor.ryujin', 'christina_hrystya', 'olya.bond', 'relevanttopics', '_bdjolar_', 'maris.oi', 'https._0rbitkit', 'putin.gfy', 'alexkovacs91', 'theultimates1mp', 'nzstuff', 'newswoow', 'v1ngi', 'ujko.vulfi', 'tiktokburnleygirl2.0', 'sashareheylo', 'eliza_shik', 'greged3', 'adam.rapl', '__tard1grade__', 'chellybean5', 'ewwklara', '_m_a_x_i_m_5', 'patp1985', 'itsmewewenph', 'tonynameless', 'artyshepckin', 'kava.kalani', 'simba__pubgm', 'joancollins.crawford', 'romania.go', 'yeshuachoseyou111', 'all_earth', 'sanaklim', 'demi.pr', 'bxtterf1y2', 'bilykkate', 'sheroarfmtv', 'ripachu', '_ukraine_top___', 'james_cardwell04', 'surenot42', 'j.eeugenrommel', 'redcoriander', 'joy_enjoy6', 'madgeandbisket', 'mandragorastore.pl', 'infinite_izanagi', 'manickatcrafts', 'certifiedsimp204', 'jjansa_sds', 'staystrongukraine22', 'yakale0', 'kellyklaing', 'nhquangho17.naau', 'kirill_nikolaich', 'fr0ggi33101', 'simplemente_gian', 'war.historian', 'kristisha1', 'ozunanews_', 'fiatunoturboxxl', 'ukraine_latest', 'mempolit', 'cristelsharettemir', 'serzhmorzh_official', 'akbulut.metin', 'xannat_gaming_official', 'shkendadubovabe', 'bell_1388', 'syrahtravels', 'olyasergeeva5', 'vpk_pokrov30', 'ruben41_ds', 'the4kcuru', 'coloredpainting_ch', 'xzajjj_', 'elyamusv', 'uncultured.alex', 'withflyingcolours', 'project_zella', 'maquetzali', 'el_braso_de_estailus', 'serzhmorzh_', 'miss.marhaba', 'shoma116military', 'leonovchircov', 'on.dahak', 'tradingrepublic', 'abilucreations', 'asmodeuxh', 'dorystory_', 'the_dragon_z_', 'zeerice23', 'realbigbangz', 'theworldof.z', 'kinomir69', 'dylesbae', 'rodrigorosales.c', '.charlie64', 'yoga_kitty', 'stu_tv', 'mrrandompost8242', 'refereepov', 'espinoza.ent', 'user12083746429', 'naye_kpop21', 'fwmundir', 'tsarevna.andrevna', 'plablon', 'ferckkz34', 'hadibaba175', 'richardk91', 'monster08051', 'pablo.z33', 'ant1ipromo', 'cainguzman', 'fx0l1', 'aviation_ars', 'bulletproofkrk', '990enjoy', 'bang_pubg', '_sertancan_', 'philgoff97', 'nadiadeiv2', '7ari_0', 'useraziz01', 'notflashyflash', 'mason_4755', 'iampatchenco', 'imooo.x1', 'archives_rus', 'fineart_russia', 'whiskey036', 'mattpeterson_', 'carusobrothers', 'homsosa', 'forrestsautoreviews', 'good_39', '12mrsingh', 'ali_sndu', 'karla.edits_', 'lilyoungstar5', 'beth.oliverm', 'kluster31', 'blacksheep.tt', 'zxqp0w0', 'alien.023', 'dustin.79', 'biarci', 'adambee03', 'alonacanada', 'toliiban', 'lady_pam75', 'eurovision.by.kseniia', 'eviethetulip', 'da_ve15', 'rr7.ftbl', 'themsinstem', 'thedailyrundown', 'milaluts', 'healingwithirina', 'picklenews', 'random.vide000', 'dominionofcanada', 'rose_marie_29', 'ignussik', 'junitajolly', 'thegossipnewstribune', 'gm_sh1', 'snoopy.vn', 'truefacts.war', 'r3dwyn', 'mamimitherzvonzweikinder', 'ridiculam0', 'natalie.vedeneeva', 'politcultua', 'celeb_babyk', 'yarakrolz', '...scofield', 'dior.addict.as', 'hollywoodvid', 'callsign_corvus', 'pray.for.the.world.2022', 'bad_edits.slolz12', 'lovebsherm457', 'pangitmo708', 'iam.rob21', 'politicsoftheworld', 'miss.darina', '_ewoenan_', 'itslavrenova', 'skv.eeditz', 'virtxuniaaa00', 'known_as_c17', 'about_ww3', 'joshnotbabaero', 'eyyofee', 'johnstone.gregory', 'shmeebit', 'thedogshouse', 'moneykristina', 'zimnefrytki', 'zelesnky88', 'fesch6', 'nathancendrawan', 'bendzsi00', 'nck_austn', 'lvi_lpz', 'theboyberi', 'm.avdeeva_', 'u_k_r_a_i_n_e', 'ukrainerussianewsdaily', 'khaleesiisaa', '._poland.iseverywhere', 'digitalh_', 'bogdan87387', 'theviktorijachronicles', 'nickaufmann', 'maruigo', 'leonardo.dp7', 'brunograffer', 'samanthaambherly', 'thedannyphantom', 'hinter.der.kulisse', 'justmepaul', 'tommywinkler', 'jamadymalvy', 'arumi_aini89', 'rubengarcia___', 'davidbeck', 'samphyo6', 'sussyperrytheplatypus', 'dhan_editz21', 'shev.chick', 'unique.planet', 'rey_nier01', 'baekerries', 'cute.ibfsurprise', 'kkcakes_', 'anniee.babyy', 'bellah.mae', 'futt.jumbo', 'globalrevivalnow', 'trash_on_air', 'lil_monster2341', 'jakegoldring', 'editb123', 'itsmeexodousofficial', 'shystebecerty', 'charlootte_19', 'beccaxjensen', '.giasgarden', 'akmaralmk', 'aboutmilitary_id', 'sanju_hipsterishartist', 'sohni2020', 'theshaunbutton', 'casperisdope', 'chloe3133', '_sam_bowles', 'photog_delgado', 'usmccultmember', 'weldon_edits', 'we_the_north1', 'adr1anrodr1guez', 'freakwithnojob', 'bronwynseach', 'techstrasse', 'cew.o.o', 'luisortner_', 'malena_cllz', 'kristinaandsam', 'militaryuploads', 'limon_me', 'aidainnn', 'viralblockchain', 'klassic_kristin', 'aaronvergara23', 'davindci1998']
+return u1,e,u2
+", "users.graphml",
+ {useTypes: true, storeNodeIds:true, readLabels:true})
+
+
+// get the subgraph for blogger suggested accounts
+match (u1:user)--(u2:user)
+where u1.id in ['itslavrenova']
+return u1,u2,e
